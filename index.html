@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LOVE NASTYA</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Playfair+Display:ital,wght@0,500;0,700;1,500&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS через CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['Playfair Display', 'serif'],
+            accent: ['Cormorant Garamond', 'serif'],
+          },
+          colors: {
+            rose: {
+              deep: '#c9184a',
+              glow: '#ff758f',
+            },
+            gold: {
+              soft: '#ffd166',
+              warm: '#f4a261',
+            },
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    /* ===== БАЗОВЫЕ СТИЛИ (Mobile First) ===== */
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .romantic-bg {
+      background: linear-gradient(160deg, #fff5f7 0%, #ffe0e8 40%, #fff8e1 70%, #fff0f3 100%);
+      background-size: 300% 300%;
+      animation: gradientShift 18s ease infinite;
+      min-height: 100dvh;
+    }
+
+    @keyframes gradientShift {
+      0%, 100% { background-position: 0% 40%; }
+      50%       { background-position: 100% 60%; }
+    }
+
+    .glow-orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ===== ЗАГОЛОВОК «LOVE NASTYA» ===== */
+    /* Измените текст в HTML: <h1 class="hero-title">LOVE NASTYA</h1> */
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      color: #c9184a;
+      opacity: 0;
+      animation:
+        titleReveal 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.2s forwards,
+        titlePulse 4s ease-in-out 1.6s infinite;
+      text-shadow: 0 2px 24px rgba(201, 24, 74, 0.15);
+    }
+
+    @keyframes titleReveal {
+      0%   { opacity: 0; transform: translateY(24px) scale(0.96); letter-spacing: 0.35em; }
+      100% { opacity: 1; transform: translateY(0) scale(1); letter-spacing: 0.18em; }
+    }
+
+    @keyframes titlePulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.88; transform: scale(1.02); }
+    }
+
+    /* ===== КОЛЛАЖ: MOBILE FIRST ===== */
+    /*
+      ЗАМЕНА ФОТО — найдите блок <!-- PHOTOS START --> ниже.
+      Поменяйте src="gf1.jpg" на свой файл для каждого фото.
+    */
+    .photo-collage {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.625rem;
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 0.75rem;
+    }
+
+    .photo-item {
+      position: relative;
+      overflow: hidden;
+      border-radius: 0.875rem;
+      box-shadow: 0 8px 28px rgba(201, 24, 74, 0.1);
+      transition: transform 0.45s cubic-bezier(0.34, 1.4, 0.64, 1),
+                  box-shadow 0.45s ease;
+    }
+
+    .photo-item:hover {
+      transform: scale(1.04) rotate(-0.8deg);
+      box-shadow: 0 16px 48px rgba(201, 24, 74, 0.2),
+                  0 0 0 2px rgba(255, 209, 102, 0.45);
+      z-index: 10;
+    }
+
+    .photo-item img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.55s ease;
+    }
+
+    .photo-item:hover img { transform: scale(1.07); }
+
+    /* Мобильная раскладка: чередование ширины + смещения */
+    .photo-1 { grid-column: 1 / -1; aspect-ratio: 4 / 3; }
+    .photo-2 { grid-column: 1; aspect-ratio: 3 / 4; margin-top: 0.5rem; }
+    .photo-3 { grid-column: 2; aspect-ratio: 3 / 4; margin-top: 1.75rem; }
+    .photo-4 { grid-column: 1 / -1; aspect-ratio: 16 / 9; }
+    .photo-5 { grid-column: 1; aspect-ratio: 1; }
+    .photo-6 { grid-column: 2; aspect-ratio: 1; align-self: end; }
+
+    /* Планшет */
+    @media (min-width: 640px) {
+      .photo-collage {
+        grid-template-columns: repeat(6, 1fr);
+        grid-template-rows: auto;
+        gap: 0.875rem;
+        padding: 0 1rem;
+      }
+
+      .photo-1 { grid-column: 1 / 5; grid-row: 1 / 3; aspect-ratio: auto; min-height: 220px; margin-top: 0; }
+      .photo-2 { grid-column: 5 / 7; grid-row: 1 / 2; aspect-ratio: auto; min-height: 140px; margin-top: 0; }
+      .photo-3 { grid-column: 5 / 7; grid-row: 2 / 3; aspect-ratio: auto; min-height: 140px; margin-top: 0; }
+      .photo-4 { grid-column: 1 / 3; grid-row: 3 / 5; aspect-ratio: auto; min-height: 200px; }
+      .photo-5 { grid-column: 3 / 5; grid-row: 3 / 4; aspect-ratio: auto; min-height: 160px; margin-top: 0; }
+      /* 6-е фото — нижняя широкая полоса, без пересечений с 4-м и 5-м */
+      .photo-6 { grid-column: 1 / 7; grid-row: 5 / 6; aspect-ratio: auto; min-height: 180px; margin-top: 0; align-self: stretch; }
+    }
+
+    /* Десктоп — динамичная асимметричная сетка */
+    @media (min-width: 1024px) {
+      .photo-collage {
+        grid-template-columns: repeat(12, 1fr);
+        grid-template-rows: repeat(8, 72px);
+        gap: 1.125rem;
+        padding: 0;
+      }
+
+      .photo-1 { grid-column: 1 / 8;  grid-row: 1 / 5; aspect-ratio: auto; min-height: unset; margin-top: 0; }
+      .photo-2 { grid-column: 8 / 11; grid-row: 1 / 3; aspect-ratio: auto; min-height: unset; }
+      .photo-3 { grid-column: 11 / 13; grid-row: 1 / 5; aspect-ratio: auto; min-height: unset; transform: translateY(8px); }
+      .photo-4 { grid-column: 8 / 11; grid-row: 3 / 5; aspect-ratio: auto; min-height: unset; }
+      /* 5-е и 6-е фото — одна строка, соседние колонки без наложения */
+      .photo-5 { grid-column: 1 / 5;  grid-row: 5 / 8; aspect-ratio: auto; min-height: unset; margin-top: 0; transform: none; }
+      .photo-6 { grid-column: 5 / 13; grid-row: 5 / 8; aspect-ratio: auto; min-height: unset; margin-top: 0; align-self: stretch; }
+    }
+
+    /* ===== ПАДАЮЩИЕ СЕРДЕЧКИ ===== */
+    #hearts-container {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 50;
+      overflow: hidden;
+    }
+
+    .falling-heart {
+      position: absolute;
+      top: -50px;
+      user-select: none;
+      will-change: transform, opacity;
+      animation: fall linear forwards, sway ease-in-out infinite;
+    }
+
+    .falling-heart--pink {
+      color: #ff758f;
+      text-shadow: 0 0 8px rgba(255, 117, 143, 0.35);
+    }
+
+    .falling-heart--yellow {
+      color: #ffd166;
+      text-shadow: 0 0 8px rgba(255, 209, 102, 0.4);
+    }
+
+    @keyframes fall {
+      0%   { transform: translateY(0) rotate(0deg); opacity: var(--heart-opacity, 0.65); }
+      80%  { opacity: var(--heart-opacity, 0.65); }
+      100% { transform: translateY(calc(100dvh + 80px)) rotate(var(--heart-rotate, 360deg)); opacity: 0; }
+    }
+
+    @keyframes sway {
+      0%, 100% { margin-left: 0; }
+      25%       { margin-left: 12px; }
+      75%       { margin-left: -12px; }
+    }
+
+    .burst-heart {
+      position: fixed;
+      pointer-events: none;
+      z-index: 60;
+      animation: burst 0.9s ease-out forwards;
+    }
+
+    .burst-heart--pink   { color: #ff758f; text-shadow: 0 0 6px rgba(255, 117, 143, 0.5); }
+    .burst-heart--yellow { color: #ffd166; text-shadow: 0 0 6px rgba(255, 209, 102, 0.55); }
+
+    @keyframes burst {
+      0%   { transform: translate(0, 0) scale(0) rotate(0deg); opacity: 1; }
+      100% { transform: translate(var(--tx), var(--ty)) scale(1.15) rotate(var(--rot)); opacity: 0; }
+    }
+
+    /* ===== КНОПКА MUTE / UNMUTE ===== */
+    #mute-btn {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      z-index: 100;
+      width: 2.75rem;
+      height: 2.75rem;
+      border-radius: 50%;
+      border: none;
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      box-shadow: 0 4px 16px rgba(201, 24, 74, 0.12);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      color: #c9184a;
+    }
+
+    #mute-btn:hover {
+      transform: scale(1.08);
+      box-shadow: 0 6px 20px rgba(201, 24, 74, 0.18);
+      background: rgba(255, 255, 255, 0.92);
+    }
+
+    #mute-btn svg { width: 1.25rem; height: 1.25rem; }
+
+    #mute-btn.is-playing {
+      color: #ffd166;
+      box-shadow: 0 4px 16px rgba(255, 209, 102, 0.3);
+    }
+  </style>
+</head>
+<body class="romantic-bg">
+
+  <!-- Фоновые световые пятна -->
+  <div class="glow-orb w-56 h-56 bg-rose-glow/25 top-0 -left-16"></div>
+  <div class="glow-orb w-72 h-72 bg-gold-soft/20 bottom-10 -right-20"></div>
+
+  <!-- Контейнер падающих сердечек -->
+  <div id="hearts-container" aria-hidden="true"></div>
+
+  <!-- ===== ФОНОВАЯ МУЗЫКА ===== -->
+  <!--
+    ЗАМЕНА МУЗЫКИ: укажите путь к вашему аудиофайлу в атрибуте src ниже.
+    Пример: src="our-song.mp3"
+    Поддерживаемые форматы: MP3, OGG, WAV.
+  -->
+  <audio id="bg-music" loop preload="auto" autoplay>
+    <source src="song.mp3" type="audio/mpeg" />
+  </audio>
+
+  <!-- Кнопка включения / выключения звука (браузеры требуют клик для воспроизведения) -->
+  <button id="mute-btn" type="button" aria-label="Включить музыку" title="Включить музыку">
+    <!-- Иконка «звук выключен» (по умолчанию) -->
+    <svg id="icon-muted" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+      <line x1="23" y1="9" x2="17" y2="15"/>
+      <line x1="17" y1="9" x2="23" y2="15"/>
+    </svg>
+    <!-- Иконка «звук включён» (скрыта до нажатия) -->
+    <svg id="icon-playing" class="hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+      <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+      <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+    </svg>
+  </button>
+
+  <main class="relative z-10 flex flex-col items-center px-3 pt-10 pb-12 sm:pt-14 sm:pb-16 md:pt-16">
+
+    <!-- ===== ЕДИНСТВЕННЫЙ ЗАГОЛОВОК — измените текст здесь ===== -->
+    <h1 class="hero-title text-3xl sm:text-4xl md:text-5xl lg:text-6xl uppercase text-center mb-8 sm:mb-10 md:mb-12">
+      LOVE NASTYA
+    </h1>
+
+    <!-- ===== PHOTOS START — замените src у каждого фото ===== -->
+    <section class="photo-collage" aria-label="Фото-коллаж">
+
+      <div class="photo-item photo-1">
+        <img src="gf1.jpg" alt="Фото 1" loading="lazy" />
+      </div>
+
+      <div class="photo-item photo-2">
+        <img src="gf2.jpg" alt="Фото 2" loading="lazy" />
+      </div>
+
+      <div class="photo-item photo-3">
+        <img src="gf3.jpg" alt="Фото 3" loading="lazy" />
+      </div>
+
+      <div class="photo-item photo-4">
+        <img src="gf4.jpg" alt="Фото 4" loading="lazy" />
+      </div>
+
+      <div class="photo-item photo-5">
+        <img src="gf5.jpg" alt="Фото 5" loading="lazy" />
+      </div>
+
+      <div class="photo-item photo-6">
+        <img src="gf6.jpg" alt="Фото 6" loading="lazy" />
+      </div>
+
+    </section>
+    <!-- ===== PHOTOS END ===== -->
+
+  </main>
+
+  <script>
+    (function () {
+      'use strict';
+
+      /* ===== СЕРДЕЧКИ: розовые + жёлтые ===== */
+      const container = document.getElementById('hearts-container');
+      const HEART_CHARS = ['♥', '♡', '❤'];
+
+      // Палитра: ~65% розовых, ~35% жёлтых — гармоничный баланс
+      const HEART_COLORS = [
+        { cls: 'falling-heart--pink',   weight: 35 },
+        { cls: 'falling-heart--pink',   weight: 30 },
+        { cls: 'falling-heart--yellow', weight: 20 },
+        { cls: 'falling-heart--yellow', weight: 15 },
+      ];
+
+      const BURST_COLORS = [
+        { cls: 'burst-heart--pink',   weight: 35 },
+        { cls: 'burst-heart--pink',   weight: 30 },
+        { cls: 'burst-heart--yellow', weight: 20 },
+        { cls: 'burst-heart--yellow', weight: 15 },
+      ];
+
+      /** Выбор цвета по весам */
+      function pickColor(palette) {
+        const total = palette.reduce((s, c) => s + c.weight, 0);
+        let r = Math.random() * total;
+        for (const item of palette) {
+          r -= item.weight;
+          if (r <= 0) return item.cls;
+        }
+        return palette[0].cls;
+      }
+
+      function createFallingHeart(x) {
+        const heart = document.createElement('span');
+        const colorCls = pickColor(HEART_COLORS);
+        heart.className = `falling-heart ${colorCls}`;
+        heart.textContent = HEART_CHARS[Math.floor(Math.random() * HEART_CHARS.length)];
+
+        const size     = Math.random() * 16 + 9;
+        const duration = Math.random() * 5 + 7;
+        const opacity  = Math.random() * 0.4 + 0.25;
+        const rotation = (Math.random() > 0.5 ? 1 : -1) * (180 + Math.random() * 360);
+        const left     = x !== null ? x : Math.random() * window.innerWidth;
+        const swayDur  = Math.random() * 2 + 2.5;
+
+        heart.style.cssText = `
+          left: ${left}px;
+          font-size: ${size}px;
+          --heart-opacity: ${opacity};
+          --heart-rotate: ${rotation}deg;
+          animation-duration: ${duration}s, ${swayDur}s;
+        `;
+
+        container.appendChild(heart);
+        heart.addEventListener('animationend', (e) => {
+          if (e.animationName === 'fall') heart.remove();
+        }, { once: true });
+      }
+
+      function burstHearts(x, y) {
+        const count = 7 + Math.floor(Math.random() * 4);
+
+        for (let i = 0; i < count; i++) {
+          const heart = document.createElement('span');
+          const colorCls = pickColor(BURST_COLORS);
+          heart.className = `burst-heart ${colorCls}`;
+          heart.textContent = HEART_CHARS[Math.floor(Math.random() * HEART_CHARS.length)];
+
+          const angle    = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.4;
+          const distance = 35 + Math.random() * 55;
+          const tx = Math.cos(angle) * distance;
+          const ty = Math.sin(angle) * distance;
+          const rot = (Math.random() - 0.5) * 720;
+          const size = Math.random() * 10 + 9;
+
+          heart.style.cssText = `
+            left: ${x}px; top: ${y}px;
+            font-size: ${size}px;
+            --tx: ${tx}px; --ty: ${ty}px; --rot: ${rot}deg;
+          `;
+
+          document.body.appendChild(heart);
+          heart.addEventListener('animationend', () => heart.remove(), { once: true });
+        }
+      }
+
+      function startHeartRain() {
+        function spawnLoop() {
+          createFallingHeart(null);
+          setTimeout(spawnLoop, Math.random() * 600 + 500);
+        }
+        spawnLoop();
+        for (let i = 0; i < 5; i++) {
+          setTimeout(() => createFallingHeart(null), i * 250);
+        }
+      }
+
+      /* ===== ФОНОВАЯ МУЗЫКА + MUTE ===== */
+      const audio       = document.getElementById('bg-music');
+      const muteBtn     = document.getElementById('mute-btn');
+      const iconMuted   = document.getElementById('icon-muted');
+      const iconPlaying = document.getElementById('icon-playing');
+      let isPlaying   = false;
+      let userMuted   = false; // пользователь явно выключил звук через кнопку
+
+      function hasAudioSource() {
+        return Boolean(audio.querySelector('source')?.getAttribute('src'));
+      }
+
+      function updateMuteUI(playing) {
+        isPlaying = playing && !audio.paused;
+        muteBtn.classList.toggle('is-playing', isPlaying);
+        iconMuted.classList.toggle('hidden', isPlaying);
+        iconPlaying.classList.toggle('hidden', !isPlaying);
+        muteBtn.setAttribute('aria-label', isPlaying ? 'Выключить музыку' : 'Включить музыку');
+        muteBtn.title = isPlaying ? 'Выключить музыку' : 'Включить музыку';
+      }
+
+      /** Попытка запуска: при загрузке и при первом клике по странице */
+      async function tryPlayMusic() {
+        if (userMuted || !hasAudioSource()) return false;
+
+        audio.volume = 0.45;
+        try {
+          await audio.play();
+          updateMuteUI(true);
+          return true;
+        } catch {
+          updateMuteUI(false);
+          return false;
+        }
+      }
+
+      muteBtn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+
+        if (isPlaying) {
+          audio.pause();
+          userMuted = true;
+          updateMuteUI(false);
+          return;
+        }
+
+        if (!hasAudioSource()) {
+          muteBtn.title = 'Добавьте src="song.mp3" в тег <audio>';
+          setTimeout(() => { muteBtn.title = 'Включить музыку'; }, 2500);
+          return;
+        }
+
+        userMuted = false;
+        await tryPlayMusic();
+      });
+
+      /* Клик по странице: сердечки + принудительный старт музыки (fallback для autoplay) */
+      document.addEventListener('click', (e) => {
+        if (e.target.closest('#mute-btn')) return;
+        if (!userMuted && audio.paused) tryPlayMusic();
+        burstHearts(e.clientX, e.clientY);
+      });
+
+      /* Первое касание на мобильных — тот же fallback */
+      document.addEventListener('touchstart', () => {
+        if (!userMuted && audio.paused) tryPlayMusic();
+      }, { once: true, passive: true });
+
+      function initPage() {
+        startHeartRain();
+        tryPlayMusic();
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initPage);
+      } else {
+        initPage();
+      }
+    })();
+  </script>
+</body>
+</html>
